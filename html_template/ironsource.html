@@ -1,0 +1,96 @@
+<!-- 这一段要添加在html头部，官方建议head -->
+<script>
+    function getScript(e, i) {
+        var n = document.createElement("script");
+        n.type = "text/javascript", n.async = !0, i && (n.onload = i), n.src = e, document.head.appendChild(n)
+    }
+
+    function parseMessage(e) {
+        var i = e.data,
+            n = i.indexOf(DOLLAR_PREFIX + RECEIVE_MSG_PREFIX);
+        if (-1 !== n) {
+            var t = i.slice(n + 2);
+            return getMessageParams(t)
+        }
+        return {}
+    }
+
+    function getMessageParams(e) {
+        var i, n = [],
+            t = e.split("/"),
+            a = t.length;
+        if (-1 === e.indexOf(RECEIVE_MSG_PREFIX)) {
+            if (a >= 2 && a % 2 === 0)
+                for (i = 0; a > i; i += 2) n[t[i]] = t.length < i + 1 ? null : decodeURIComponent(t[i + 1])
+        } else {
+            var
+                o = e.split(RECEIVE_MSG_PREFIX);
+            void 0 !== o[1] && (n = JSON && JSON.parse(o[1]))
+        }
+        return n
+    }
+
+    function getDapi(e) {
+        var i = parseMessage(e);
+        if (!i || i.name === GET_DAPI_URL_MSG_NAME) {
+            var n = i.data;
+            getScript(n, onDapiReceived)
+        }
+    }
+
+    function invokeDapiListeners() {
+        for (var e in dapiEventsPool) dapiEventsPool.hasOwnProperty(e) &&
+            dapi.addEventListener(e, dapiEventsPool[e])
+    }
+
+    function onDapiReceived() {
+        dapi = window.dapi,
+            window.removeEventListener("message", getDapi), invokeDapiListeners()
+    }
+
+    function init() {
+        window.dapi.isDemoDapi &&
+            (window.parent.postMessage(DOLLAR_PREFIX + SEND_MSG_PREFIX + JSON.stringify({
+                    state: "getDapiUrl"
+                }), "*"),
+                window.addEventListener("message", getDapi, !1))
+    }
+    var DOLLAR_PREFIX = "$$",
+        RECEIVE_MSG_PREFIX = "DAPI_SERVICE:",
+        SEND_MSG_PREFIX = "DAPI_AD:",
+        GET_DAPI_URL_MSG_NAME = "connection.getDapiUrl",
+        dapiEventsPool = {},
+        dapi = window.dapi || {
+            isReady: function () {
+                return !1
+            },
+            addEventListener: function (e, i) {
+                dapiEventsPool[e] = i
+            },
+            removeEventListener: function (e) {
+                delete dapiEventsPool[e]
+            },
+            isDemoDapi: !0
+        };
+    init();
+</script>
+
+<!-- 这一段要添加到html的最后，在我们的资源代码之后，然后这里来调用开始引擎的入口，正式启动引擎 -->
+<script>
+    //LOAD the game, but do not start it until the ad is visible
+
+    window.addEventListener("load", function () {
+        (dapi.isReady()) ? onReadyCallback(): dapi.addEventListener("ready", onReadyCallback);
+        //here you can put other code that not related to presenting any media information - do not play any audio/video/images at this moment
+        //use this to prepare your creative to be shown(i.e. do necessary calculations or pre-loads)
+    });
+
+    function onReadyCallback() {
+        //no need to listen to this event anymore
+        dapi.removeEventListener("ready", onReadyCallback);
+        let isAudioEnabled = !!dapi.getAudioVolume();
+        if (dapi.isViewable()) {
+            //在平台sdk和引擎都加载完成后。开始启动引擎
+        }
+    }
+</script>
