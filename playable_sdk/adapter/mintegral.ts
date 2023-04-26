@@ -2,7 +2,7 @@ import base_playable from "./base_playable";
 /**
  * https://www.mindworks-creative.com/review/doc
  */
-export default class mtg extends base_playable {
+export default class mintegral extends base_playable {
 
     download() {
         this.call_window_func("install");

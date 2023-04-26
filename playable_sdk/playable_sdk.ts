@@ -5,14 +5,17 @@
  */
 import applovin from "./adapter/applovin";
 import ironsource from "./adapter/ironsource";
-import mtg from "./adapter/mtg";
+import mintegral from "./adapter/mintegral";
 import base_playable from "./adapter/base_playable";
+import unity from "./adapter/unity";
 
 let sdk: base_playable;
-if (window["mraid"]) {
+if (window["mraid"] && window["mraid"].getState) {
+    sdk = new unity();
+} else if (window["mraid"]) {
     sdk = new applovin();
 } else if (window["install"]) {
-    sdk = new mtg();
+    sdk = new mintegral();
 } else if (window["dapi"]) {
     sdk = new ironsource();
 } else {

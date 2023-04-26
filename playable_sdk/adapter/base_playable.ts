@@ -1,7 +1,7 @@
 export default class base_playable {
 
     constructor() {
-        console.log("cocos playable sdk from : https://github.com/magician-f/playable-sdk")
+        console.log("cocos playable sdk from : https://github.com/magician-f/playable-sdk");
         this._init();
     }
 
@@ -71,6 +71,19 @@ export default class base_playable {
      * other    : 不需要
      */
     set_game_close_listener(context: any, listener: () => void) {
+        //该平台无此要求
+    }
+
+    /**
+     * 设置在商店中地址
+     * unity    : 游戏应用商店页面的 URL 字符串
+     * other    : 不需要
+     * 
+     * 注意替换：your_game_id
+     * @param google https://play.google.com/store/apps/details?id=your_game_id
+     * @param apple https://itunes.apple.com/us/your_game_id?mt=8
+     */
+    set_store_game_address(google: string, apple: string) {
         //该平台无此要求
     }
 }

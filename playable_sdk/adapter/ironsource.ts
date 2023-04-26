@@ -15,7 +15,7 @@ export default class ironsource extends base_playable {
     }
 
     protected on_visible_change(event) {
-        console.log("isViewable " + event.isViewable);
+        console.log("on_visible_change " + event.isViewable);
         if (event.isViewable) {
             //START or RESUME the ad (add your own code here)
             cc.game.resume();

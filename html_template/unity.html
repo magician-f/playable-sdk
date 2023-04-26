@@ -1,0 +1,15 @@
+<script>
+    function onSdkReady() {
+        if (mraid.isViewable()) {
+            //todo start game engine
+        }
+    }
+
+    window.addEventListener("load", function () {
+        if (mraid.getState() === 'loading') {
+            mraid.addEventListener('ready', onSdkReady);
+        } else {
+            onSdkReady();
+        }
+    });
+</script>

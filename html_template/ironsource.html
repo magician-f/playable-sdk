@@ -1,4 +1,3 @@
-<!-- 这一段要添加在html头部，官方建议head -->
 <script>
     function getScript(e, i) {
         var n = document.createElement("script");
@@ -73,24 +72,20 @@
             isDemoDapi: !0
         };
     init();
-</script>
-
-<!-- 这一段要添加到html的最后，在我们的资源代码之后，然后这里来调用开始引擎的入口，正式启动引擎 -->
-<script>
-    //LOAD the game, but do not start it until the ad is visible
-
-    window.addEventListener("load", function () {
-        (dapi.isReady()) ? onReadyCallback(): dapi.addEventListener("ready", onReadyCallback);
-        //here you can put other code that not related to presenting any media information - do not play any audio/video/images at this moment
-        //use this to prepare your creative to be shown(i.e. do necessary calculations or pre-loads)
-    });
 
     function onReadyCallback() {
-        //no need to listen to this event anymore
         dapi.removeEventListener("ready", onReadyCallback);
         let isAudioEnabled = !!dapi.getAudioVolume();
         if (dapi.isViewable()) {
-            //在平台sdk和引擎都加载完成后。开始启动引擎
+            // todo start game engine
         }
     }
+
+    window.addEventListener("load", function () {
+        if (dapi.isReady()) {
+            onReadyCallback();
+        } else {
+            dapi.addEventListener("ready", onReadyCallback);
+        }
+    });
 </script>
