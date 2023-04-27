@@ -8,6 +8,7 @@ import ironsource from "./adapter/ironsource";
 import mintegral from "./adapter/mintegral";
 import base_playable from "./adapter/base_playable";
 import unity from "./adapter/unity";
+import pangle from "./adapter/pangle";
 
 let sdk: base_playable;
 if (window["mraid"] && window["mraid"].getState) {
@@ -18,6 +19,8 @@ if (window["mraid"] && window["mraid"].getState) {
     sdk = new mintegral();
 } else if (window["dapi"]) {
     sdk = new ironsource();
+} else if (window["pangle"]) {
+    sdk = new pangle();
 } else {
     sdk = new base_playable();
 }
